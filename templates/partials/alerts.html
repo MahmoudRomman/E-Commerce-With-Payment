@@ -1,0 +1,38 @@
+{% load static %}
+{% load i18n %}
+
+<div class="message-container text-center">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message-alert">
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+                        <strong>Error:</strong>
+                    {% endif %}
+                    <span>{{ message }}</span>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Optional styling for smoother visibility -->
+<style>
+    .message-alert {
+        max-width: 800px;
+        margin: 10px auto;
+        transition: opacity 0.5s ease;
+    }
+</style>
+
+<!-- Auto-hide message after 3 seconds -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        setTimeout(function () {
+            document.querySelectorAll('.message-alert').forEach(function (el) {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 500);  // remove after fade out
+            });
+        }, 3000); // 3 seconds
+    });
+</script>
