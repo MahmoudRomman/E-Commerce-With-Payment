@@ -41,6 +41,7 @@ INSTALLED_APPS = [
 
     'django_countries',
     'accounts',
+    'store',
 ]
 
 MIDDLEWARE = [
@@ -82,6 +83,15 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+AUTHENTICATION_BACKENDS = [
+    'accounts.backends.EmailAuthBackend',  
+    'django.contrib.auth.backends.ModelBackend',  # optional fallback
+]
+
+AUTH_USER_MODEL = 'accounts.Account'  
+
+
 
 
 # Password validation

@@ -43,7 +43,7 @@ class MyAccountManager(BaseUserManager):
 
 def get_countries():
     countries = list(pycountry.countries)
-    country_choices = [(country.alpha_2, country.name) for country in countries]
+    country_choices = [(country.alpha_2, country.name) for country in countries]    #type: ignore
     return country_choices
 
 
@@ -66,17 +66,18 @@ class Account(AbstractBaseUser):
 
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['first_name', 'last_name']
+    REQUIRED_FIELDS = ['username', 'first_name', 'last_name', 'country']
 
     objects = MyAccountManager()
 
     def __str__(self):
         return self.username
 
-    def has_permission(self, permission, obj=None):
+    def has_perm(self, perm, obj=None):
         return self.is_admin
 
-    def has_module_permission(self, app_label):
+    def has_module_perms(self, app_label):
         return True
+
 
 

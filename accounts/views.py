@@ -97,9 +97,13 @@ def login(request):
                 if user is None:
                     form.add_error(None, 'Invalid Password.')
                 else:
-                    auth_login(request, user)  #type: ignore
-                    messages.success(request, 'Login Successfully!')
-                    return redirect('accounts:register')  # redirect to the url page that you want
+                    if user.is_active:
+                        auth_login(request, user)  #type: ignore
+                        messages.success(request, 'Login Successfully!')
+                        return redirect('store:home')  # redirect to the url page that you want
+                    else:
+                        messages.error(request, 'Please, Go to you email inbox to activate your email first!')
+                        return redirect('accounts:login')  # redirect to the url page that you want
             else:
                 form.add_error(None, 'Invalid Email.')
                 messages.error(request, 'Please Enter Correct Email!')
