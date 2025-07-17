@@ -1,10 +1,11 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponse
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Q
 # from . import forms
 from . import models
 
@@ -12,16 +13,29 @@ from . import models
 
 
 def home(request):
+
+    # del request.session['cart']
     return render(request, 'store/home.html')
 
 
 
+def products(request, category_slug=None):
+    category = None
+    categories = models.Category.objects.all() #type: ignore
 
-def products(request):
-    products = models.Product.objects.filter(status=models.Status.AVAILABLE)  #type: ignore
+    query = request.GET.get('q', '')  # Get query string from ?q=...
+    products = models.Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query),    #type: ignore
+                                            status=models.Status.AVAILABLE)  
+
+    if category_slug:
+        category = get_object_or_404(models.Category, slug=category_slug)
+        products = products.filter(category=category)
 
     context = {
         'products' : products,
+        'category' : category,
+        'categories' : categories,
+        'query': query,
     }
     return render(request, 'store/products.html', context)
 

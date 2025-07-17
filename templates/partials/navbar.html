@@ -17,12 +17,14 @@
                   </span>
                 </a>
               </div>
-              <from class="search_form">
-                <input type="text" class="form-control" placeholder="Search here...">
-                <button class="" type="submit">
+
+              <form class="search_form" method="GET" action="{% url 'store:products' %}">
+                <input type="text" class="form-control" name="q" placeholder="Search here..." value="{{ request.GET.q }}">
+                <button type="submit">
                   <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-              </from>
+              </form>
+
               <div class="user_option_box">
                 <a href="" class="account-link">
                   <i class="fa fa-user" aria-hidden="true"></i>
@@ -30,12 +32,12 @@
                     My Account
                   </span>
                 </a>
-                <a href="" class="cart-link">
-                  <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                  <span>
-                    Cart
-                  </span>
+
+                <a href="{% url 'cart:view_cart' %}">
+                  <i class="fa fa-shopping-cart"></i>
+                  Cart <span class="badge badge-danger">{{ cart_item_count }}</span>
                 </a>
+
               </div>
             </div>
   
@@ -64,9 +66,12 @@
                       Categories
                     </a>
                     <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      <a class="dropdown-item" href="category1.html">Category 1</a>
-                      <a class="dropdown-item" href="category2.html">Category 2</a>
-                      <a class="dropdown-item" href="category3.html">Category 3</a>
+                      <a class="dropdown-item" href="{% url 'store:products' %}">All</a>
+                      
+                      {% for category in categories %}
+                        <a class="dropdown-item" href="{{category.get_category_url}}">{{category.name}}</a>
+                      {% endfor %}
+                      
                     </div>
                   </li>
                   
@@ -77,7 +82,7 @@
                     <a class="nav-link" href="product.html">Products</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="why.html">Why Us</a>
+                    <a class="nav-link" href="#">Why Us</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="testimonial.html">Testimonial</a>

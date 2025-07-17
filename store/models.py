@@ -1,4 +1,5 @@
 from ast import arg
+from django.urls import reverse
 from random import choices
 from django.db import models
 from django.utils import timezone
@@ -11,6 +12,11 @@ class Category(models.Model):
     name = models.CharField(max_length=250)
     slug = models.SlugField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+
+
+    def get_category_url(self):
+        return reverse('store:products_by_category', args=[self.slug])  #type: ignore
+
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -50,6 +56,9 @@ class Product(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+
+    def get_product_url(self):
+        return reverse('store:product_detail', args=[self.slug])  
 
     def save(self, *args, **kwargs):
         if not self.slug:
