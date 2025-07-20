@@ -135,3 +135,17 @@ def activate_account(request, uidb64, token):
         messages.success(request, 'Your Account Is Not Activated Yet, Please Check Your Mail And Try Again!')
         return redirect('accounts:register')
     
+
+
+
+
+
+def profile(request):
+    user = request.user
+    
+    print("*" * 100)
+    print(user)
+    context = {
+        'user'  :user,
+    }
+    return render(request, 'accounts/profile.html', context)

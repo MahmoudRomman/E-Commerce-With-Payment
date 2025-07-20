@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Order Success
+{% endblock title %}
+    
+
+{% block extra_style %}
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+
+{% endblock extra_style %}
+    
+
+{% block content %}
+{% include 'partials/alerts.html' %}
+
+<div class="container mt-5">
+    <h2 class="mb-4">🧾 My Orders</h2>
+
+    {% if orders %}
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Total Cost</th>
+                        <th>Paid</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'orders:order_detail' order.order_id %}">
+                                {{ order.order_id }}
+                            </a>
+                        </td>
+                        <td>{{ order.created_at|date:"Y-m-d H:i" }}</td>
+                        <td>{{ order.get_total_cost }} $</td>
+                        <td>
+                            {% if order.paid %}
+                                <span class="badge badge-success">Paid</span>
+                            {% else %}
+                                <span class="badge badge-warning">Unpaid</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% else %}
+        <p>No orders found.</p>
+    {% endif %}
+</div>
+
+
+{% endblock content %}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

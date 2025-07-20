@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Order Success
+{% endblock title %}
+    
+
+{% block extra_style %}
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+
+{% endblock extra_style %}
+    
+
+{% block content %}
+{% include 'partials/alerts.html' %}
+<div class="container mt-5">
+    <h3>Order Details</h3>
+    <p><strong>Order ID:</strong> {{ order.order_id }}</p>
+    <p><strong>Date:</strong> {{ order.created_at|date:"Y-m-d H:i" }}</p>
+    <p><strong>Paid:</strong> {{ order.paid|yesno:"Yes,No" }}</p>
+
+    <h5 class="mt-4">Items:</h5>
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price</th>
+                <th>Qty</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>{{ item.price }} SAR</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.get_cost }} SAR</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <p class="text-end"><strong>Total:</strong> {{ order.get_total_cost }} SAR</p>
+</div>
+
+
+{% endblock content %}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

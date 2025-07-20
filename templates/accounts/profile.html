@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Profile
+{% endblock title %}
+    
+
+{% block extra_style %}
+
+<style>
+
+
+        .profile-card {
+          max-width: 700px;
+          margin: 60px auto;
+          background-color: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+          padding: 40px 30px;
+        }
+        .profile-header {
+          margin-bottom: 30px;
+        }
+        .profile-header h2 {
+          font-weight: bold;
+          color: #333;
+        }
+        .profile-info i {
+          color: #007bff;
+          margin-right: 10px;
+        }
+        .profile-info p {
+          margin-bottom: 15px;
+        }
+        .edit-btn {
+          margin-top: 30px;
+          font-size: 18px;
+          padding: 10px 25px;
+          border-radius: 8px;
+        }
+    
+    </style>
+
+{% endblock extra_style %}
+    
+
+{% block content %}
+{% include 'partials/alerts.html' %}
+
+
+
+
+<div class="container">
+    <div class="profile-card">
+      <div class="profile-header text-center">
+        <h2><i class="fas fa-user-circle"></i> User Profile</h2>
+      </div>
+      <div class="profile-info">
+        <p style="font-size: x-large;"><i class="fas fa-id-badge"></i> <strong>Username:</strong> {{ user.username }}</p>
+        <p style="font-size: x-large;"><i class="fas fa-user"></i> <strong>First Name:</strong> {{ user.first_name }}</p>
+        <p style="font-size: x-large;"><i class="fas fa-user"></i> <strong>Last Name:</strong> {{ user.last_name }}</p>
+        <p style="font-size: x-large;"><i class="fas fa-envelope"></i> <strong>Email:</strong> {{ user.email }}</p>
+        <p style="font-size: x-large;"><i class="fas fa-phone-alt"></i> <strong>Phone Number:</strong> {{ user.phone_number }}</p>
+        <p style="font-size: x-large;"><i class="fas fa-flag"></i> <strong>Country:</strong> {{ user.country }}</p>
+      </div>
+      <div class="text-center">
+        <a href="#" class="btn btn-primary edit-btn">
+          <i class="fas fa-edit"></i> Edit Profile
+        </a>
+      </div>
+    </div>
+  </div>
+
+  
+
+{% endblock content %}
+    
+
+
+
+
+
+
+

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Order Success
+{% endblock title %}
+    
+
+{% block extra_style %}
+<style>
+    body {
+      background-color: #f8f9fa;
+    }
+  </style>
+
+{% endblock extra_style %}
+    
+
+{% block content %}
+{% include 'partials/alerts.html' %}
+
+
+<div class="container mt-5 mb-5">
+    <div class="alert alert-warning" style="font-size: large;">
+      ✅ Your order has been placed successfully!
+    </div>
+<a href="{% url 'store:home' %}" class="btn btn-primary">Return to Home</a>
+
+
+</div>
+
+
+
+
+{% endblock content %}
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

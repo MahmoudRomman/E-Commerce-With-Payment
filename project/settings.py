@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'accounts',
     'store',
     'cart',
+    'orders',
 
 ]
 
@@ -69,6 +70,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart_item_count', 
+                'cart.context_processors.get_categories',                 
             ],
         },
     },
@@ -163,4 +165,25 @@ EMAIL_HOST_PASSWORD = 'twsc umom cjdr gxvq'  # not your Gmail password
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 
+
+# settings of cache
+CACHES = {
+ 'default': {
+    'BACKEND': 'django_redis.cache.RedisCache',
+    'LOCATION': 'redis://127.0.0.1:6379/1',
+    'OPTIONS': {
+        'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+    #     'CONNECTION_POOL_KWARGS': {
+    #     'max_connections': 100,
+    #     'retry_on_timeout': True,
+    # },
+ },
+
+    # 'KEY_PREFIX': 'ecommerce',
+ }
+ }
+ 
+# # Optional: Store sessions in Redis
+# SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
+# SESSION_CACHE_ALIAS = 'default'
 
