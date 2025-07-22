@@ -21,6 +21,24 @@
         transform: scale(1.1);
     }
 
+
+    .square-button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f9f9f9;
+        transition: background-color 0.2s ease;
+    }
+
+    .square-button:hover {
+        background-color: #e0e0e0;
+    }
+
+
 </style>
 {% endblock extra_style %}
     
@@ -62,21 +80,19 @@
                                     </div>
                                 </td>
                                 <td>${{item.price}}</td>
-                                <!-- <td>
-                                    <input type="number" class="form-control" value="{{item.quantity}}" min="1">
-                                </td> -->
 
                                 <td style="display: flex; align-items: center; gap: 10px;">
-                                    <a href="{% url 'cart:remove_from_cart' slug %}" title="Remove one">
-                                        <img width="20" height="20" src="https://img.icons8.com/android/24/minus.png" alt="minus"/>
+                                    <a href="{% url 'cart:remove_from_cart' slug %}" title="Remove one" class="square-button">
+                                        <img width="16" height="16" src="https://img.icons8.com/android/24/minus.png" alt="minus"/>
                                     </a>
                                 
                                     <span>{{ item.quantity }}</span>
                                 
-                                    <a href="{% url 'cart:add_to_cart' slug %}" title="Add one">
-                                        <img width="20" height="20" src="https://img.icons8.com/android/24/plus.png" alt="plus"/>
+                                    <a href="{% url 'cart:add_to_cart' slug %}" title="Add one" class="square-button">
+                                        <img width="16" height="16" src="https://img.icons8.com/android/24/plus.png" alt="plus"/>
                                     </a>
                                 </td>
+                                
                                 
 
                                     <td>${{item.total_price}}</td>
@@ -105,14 +121,26 @@
             <div class="col-lg-4">
                 <div class="cart_summary">
                     <h4>Cart Summary</h4>
+                    {% if DISCOUNT %}      
                     <ul>
-                        <li>Subtotal: <span>$300</span></li>
-                        <li>Tax: <span>$30</span></li>
-                        <li>Total: <span>${{total_cart_price}}</span></li>
+                        <li>Before Discount: <span>${{total_cart_price}}</span></li>
+                        <li>Discount: <span>${{savings}}</span></li>
+                        <li>After Discount: <span>${{get_final_price_after_coupon}}</span></li>
                     </ul>
-                    <form class="coupon_form mt-4">
-                        <label for="coupon_code">Coupon Code</label>
-                        <input type="text" id="coupon_code" class="form-control" placeholder="Enter your code">
+                    {% else %}
+                    <ul>
+                        <li>Before Discount: <span>${{total_cart_price}}</span></li>
+                        <li>Discount: <span>${{savings}}</span></li>
+                        <li>After Discount: <span>${{total_cart_price}}</span></li>
+                    </ul>
+                    {% endif %}
+
+                    <form action="{% url 'coupons:apply_coupon' %}" method="post" class="coupon_form mt-4">
+                        <label for="coupon_code">Coupon Code: </label>
+
+                        {% csrf_token %}
+                        {{form.code}}
+                        
                         <button type="submit" class="btn btn-primary mt-2">Apply Coupon</button>
                     </form>
                     <a href="{% url 'orders:create_order' %}" class="btn btn-success mt-4 w-100">Proceed to Checkout</a>

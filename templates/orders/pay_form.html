@@ -1,0 +1,73 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+    Complete Your Payment
+{% endblock title %}
+    
+
+{% block extra_style %}
+<style>
+    body {
+        background-color: #f8f9fa;
+        padding: 40px 0;
+    }
+    .container {
+        max-width: 800px;
+    }
+    .form-group img {
+        max-width: 100%;
+        margin-top: 10px;
+    }
+    .header {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+  </style>
+
+{% endblock extra_style %}
+    
+
+{% block content %}
+{% include 'partials/alerts.html' %}
+<div class="container mt-5">
+<div class="container bg-white shadow p-4 rounded">
+    <div class="header">
+        <h4 class="text-danger">Pay Now via Vodafone Cash</h4>
+        <p class="text-muted">Please enter the phone number used for payment and upload a screenshot of the transfer.</p>
+    </div>
+
+    <form action="{% url 'orders:pay_order' order.order_id %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            <label for="id_pay_phone">Payment Phone Number:</label>
+            {{ form.pay_phone }}
+            {% if form.pay_phone.errors %}
+                <div class="text-danger">{{ form.pay_phone.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <div class="form-group">
+            <label for="id_pay_image">Payment Screenshot:</label>
+            {{ form.pay_image }}
+            {% if form.pay_image.errors %}
+                <div class="text-danger">{{ form.pay_image.errors.0 }}</div>
+            {% endif %}
+        </div>
+
+        <button type="submit" class="btn btn-danger btn-block">Submit Payment Details</button>
+    </form>
+</div>
+    
+</div>
+
+
+{% endblock content %}
+    
+
+
+

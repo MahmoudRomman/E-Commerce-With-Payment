@@ -4,29 +4,30 @@ from django.shortcuts import render, get_object_or_404
 
 from . import models
 from . import forms
+from . import tasks
 from django.shortcuts import redirect
 from decimal import Decimal
 from django.contrib.auth.decorators import login_required
 from django.template.loader import render_to_string
-from django.core.mail import EmailMultiAlternatives
 from django.conf import settings
+from django.http import HttpResponse
+import weasyprint
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 
 
-def send_order_confirmation_email(order):
-    subject = f"Order Confirmation - {order.order_id}"
-    from_email = settings.DEFAULT_FROM_EMAIL
-    to_email = order.email
-
-    html_content = render_to_string('orders/email_order_confirmation.html', {'order': order})
-    text_content = f"Thank you for your order {order.order_id}. Please view the full email in HTML."
-
-    email = EmailMultiAlternatives(subject, text_content, from_email, [to_email])
-    email.attach_alternative(html_content, "text/html")
-    email.send()
 
 
+
+@staff_member_required
+def admin_order_pdf(request, order_id):
+    order = get_object_or_404(models.Order, order_id=order_id)
+    html = render_to_string("orders/order_invoice_pdf.html", {"order": order})
+    response = HttpResponse(content_type="application/pdf")
+    response['Content-Disposition'] = f"filename=order_{order.user.username}_{order.order_id}.pdf"
+    weasyprint.HTML(string=html).write_pdf(response)
+    return response
 
 
 def create_order(request):
@@ -59,9 +60,9 @@ def create_order(request):
             # Clear cart after successful order
             request.session.pop('cart')
             # after saving order and order items
-            send_order_confirmation_email(order)
-            messages.success(request, "Order placed successfully!")
-            return redirect('orders:order_success')  # ← recommended: show success page
+            tasks.send_order_confirmation_email.delay(order.id) 
+            messages.success(request, "Your order placed successfully, You can pay not for it.")
+            return redirect('orders:pay_order', order_id=order.order_id) 
     else:
         form = forms.OrderCreationForm()
 
@@ -76,15 +77,6 @@ def create_order(request):
 
 
 
-
-
-def order_success(request):
-    return render(request, 'orders/order_success.html')
-
-
-
-
-
 @login_required
 def my_orders(request):
     orders = models.Order.objects.filter(user=request.user).order_by('-created_at')
@@ -95,3 +87,38 @@ def my_orders(request):
 def order_detail(request, order_id):
     order = get_object_or_404(models.Order, order_id=order_id, user=request.user)
     return render(request, 'orders/order_detail.html', {'order': order})
+
+
+def order_pay_by_VF(request, order_id):
+    order = get_object_or_404(models.Order, order_id = order_id)
+    if request.method == "POST":
+        form = forms.OrderPayForm(request.POST, request.FILES)
+        if form.is_valid():
+            pay_order = form.save(commit=False)
+            pay_order.order = order
+            order.paid = True
+            order.save()
+            pay_order.save()
+            return redirect("orders:payment_success", order_id=order.order_id)
+
+    else:
+        form = forms.OrderPayForm()
+    
+    context = {
+        'order' : order,
+        'form' : form,
+    }
+    return render(request, "orders/pay_form.html", context)
+
+
+
+def payment_success(request, order_id):
+    order = get_object_or_404(models.Order, order_id=order_id)
+    tasks.send_order_pdf.delay(order.id) 
+    context = {
+        'order' : order,
+    }
+    return render(request, 'orders/payment_success.html', context)
+
+
+

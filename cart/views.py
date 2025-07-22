@@ -1,5 +1,3 @@
-import decimal
-from tokenize import Double
 from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
@@ -8,10 +6,12 @@ from django.http import HttpResponse
 from django.contrib import messages
 from django.urls import reverse
 from django.db.models import Q
-from decimal import Decimal
+from decimal import Decimal, ROUND_HALF_UP
 from . import forms
 from . import models
 from store import models as store_models
+from coupons.models import Coupon
+from coupons.forms import ApplyCouponForm
 # Create your views here.
 
 
@@ -117,35 +117,80 @@ def remove_single_item_from_cart(request, product_slug):
 
 
 
+
+
+def get_coupon_instance(request):
+    coupon_slug = request.session.get('coupon_slug', {})
+    if coupon_slug:
+        try:
+            coupon = Coupon.objects.get(slug=coupon_slug)
+            return coupon
+        except ObjectDoesNotExist:
+            messages.error(request, "the coupon you entered is incorrect or invalid")
+    return None
+
+
+
+
+def get_discount_value(request):
+    coupon = get_coupon_instance(request)
+    if coupon:
+        cart = request.session.get('cart', {})
+        total_cart_price = sum(Decimal(item['total_price']) for item in cart.values())
+        res = (coupon.discount / Decimal(100)) * total_cart_price
+
+        return res
+
+    return Decimal(0)
+
+
+
+def get_final_cart_cost(request):
+    dis_val = get_discount_value(request)
+    if dis_val:
+        cart = request.session.get('cart', {})
+        total_cart_price = sum(Decimal(item['total_price']) for item in cart.values())
+        final_price = Decimal(total_cart_price - dis_val)
+        request.session['get_final_price_after_coupon'] = float(final_price)
+
+    else:
+        request.session['get_final_price_after_coupon'] = float(0)
+
+
+
+
+
+def round_decimal(value):
+    return value.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
 def view_cart(request):
     cart = request.session.get('cart', {})
+
+    form = ApplyCouponForm()
+    get_final_cart_cost(request)  # calculate & store in session
+    get_final_price_after_coupon = request.session.get('get_final_price_after_coupon', 0)
+
+    if not isinstance(get_final_price_after_coupon, Decimal):
+        get_final_price_after_coupon = Decimal(get_final_price_after_coupon)
+
     total_cart_price = sum(Decimal(item['total_price']) for item in cart.values())
+    total_cart_price = round_decimal(total_cart_price)
+    get_final_price_after_coupon = round_decimal(get_final_price_after_coupon)
+
+    DISCOUNT = False
+    if get_final_price_after_coupon == Decimal("0.00"):
+        savings = Decimal("0.00")
+    else:
+        savings = round_decimal(total_cart_price - get_final_price_after_coupon)
+        DISCOUNT = True
 
     context = {
         'cart': cart,
-        'total_cart_price': total_cart_price
+        'total_cart_price': total_cart_price,
+        'get_final_price_after_coupon': get_final_price_after_coupon,
+        'savings': savings,
+        'DISCOUNT': DISCOUNT,
+        'form': form,
     }
     return render(request, 'cart/cart.html', context)
 
-
-
-# def view_cart(request):
-#     cart = request.session.get('cart', {})
-
-#     for key, val in cart.items():
-#         print(key, '-', val)
-
-
-#     total_quantity = sum(item['quantity'] for item in cart.values())
-#     product_name = cart[product_key]['quantity']
-#     total_quantity = sum(item['quantity'] for item in cart.values())
-
-#     context = {
-#         'cart': cart,
-#         'total_quantity': total_quantity,
-#     }
-
-#     return render(request, 'cart/cart.html', context)
-
-
-    

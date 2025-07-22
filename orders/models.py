@@ -79,3 +79,23 @@ class OrderItem(models.Model):
 
 
         
+
+
+class OrderPay(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
+    pay_phone = models.CharField(max_length=11)
+    pay_image = models.ImageField(upload_to='orders/payments')
+    created = models.DateTimeField(auto_now_add=True)
+
+
+    def __str__(self):
+        return str(self.order.order_id) #type: ignore
+
+    class Meta:
+        ordering = ['-created']
+
+
+
+
+
+        

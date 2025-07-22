@@ -23,10 +23,11 @@
 
 
 <div class="container mt-5 mb-5">
-    <div class="alert alert-warning" style="font-size: large;">
-      ✅ Your order has been placed successfully!
+    <div class="alert alert-success" style="font-size: large;">
+      ✅ Successful Payment with order ID: {{order.order_id}},
+          You can now go to your orders page!
     </div>
-<a href="{% url 'store:home' %}" class="btn btn-primary">Return to Home</a>
+<a href="{% url 'orders:my_orders' %}" class="btn btn-primary">Return to my orders</a>
 
 
 </div>
