@@ -45,18 +45,45 @@ INSTALLED_APPS = [
     'cart',
     'orders',
     'coupons',
+    'api_endpoints',
+    'rest_framework',
+    'rest_framework.authtoken',
 
 ]
 
+
+# Middleware for language switching
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.locale.LocaleMiddleware',  # Add this
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+
+
+# The role of the Middleware 
+# | Middleware                 | Purpose                                                             |
+# | -------------------------- | ------------------------------------------------------------------- |
+# | `SecurityMiddleware`       | Adds security headers.                                              |
+# | `SessionMiddleware`        | Manages session data in cookies.                                    |
+# | `LocaleMiddleware`         | Enables language translation based on user/browser.                 |
+# | `CommonMiddleware`         | Adds behaviors like URL normalization (e.g., trailing slashes).     |
+# | `CsrfViewMiddleware`       | Protects against CSRF attacks.                                      |
+# | `AuthenticationMiddleware` | Associates users with requests.                                     |
+# | `MessageMiddleware`        | Enables temporary messages (e.g., “Password updated successfully”). |
+# | `XFrameOptionsMiddleware`  | Prevents your site from being framed (clickjacking protection).     |
+
+
+
+
+
+
+
 
 ROOT_URLCONF = 'project.urls'
 
@@ -71,7 +98,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'cart.context_processors.cart_item_count', 
-                'cart.context_processors.get_categories',                 
+                'cart.context_processors.get_categories',           
+                'django.template.context_processors.i18n',      
             ],
         },
     },
@@ -174,25 +202,57 @@ CACHES = {
     'LOCATION': 'redis://127.0.0.1:6379/1',
     'OPTIONS': {
         'CLIENT_CLASS': 'django_redis.client.DefaultClient',
-    #     'CONNECTION_POOL_KWARGS': {
-    #     'max_connections': 100,
-    #     'retry_on_timeout': True,
-    # },
- },
+},}}
 
-    # 'KEY_PREFIX': 'ecommerce',
- }
- }
+
  
 # # Optional: Store sessions in Redis
 # SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 # SESSION_CACHE_ALIAS = 'default'
 
 
+CELERY_BROKER_URL = 'redis://localhost:6379/0'  # Redis URL
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'  # Optional, for storing results
 
 
-# Celey setting with rebbitmq
-CELERY_RESULT_BACKEND = 'rpc://'
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+
+# Default language
+LANGUAGE_CODE = 'en'
+
+# Enable internationalization
+USE_I18N = True
+USE_L10N = True
+
+# Timezone settings (optional)
+TIME_ZONE = 'UTC'
+USE_TZ = True
+
+# Supported languages
+from django.utils.translation import gettext_lazy as _
+
+LANGUAGES = [
+    ('en', _('English')),
+    ('ar', _('Arabic')),
+]
+
+# Path to store translation files
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

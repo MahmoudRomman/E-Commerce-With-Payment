@@ -32,6 +32,8 @@ def admin_order_pdf(request, order_id):
 
 def create_order(request):
     cart = request.session.get('cart', {})
+    coupon_slug = request.session.get('coupon_slug', {})
+
     success = False
 
     if request.method == "POST":
@@ -59,6 +61,8 @@ def create_order(request):
                 )
             # Clear cart after successful order
             request.session.pop('cart')
+            if coupon_slug:
+                request.session.pop('coupon_slug')
             # after saving order and order items
             tasks.send_order_confirmation_email.delay(order.id) 
             messages.success(request, "Your order placed successfully, You can pay not for it.")

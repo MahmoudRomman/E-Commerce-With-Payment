@@ -1,4 +1,7 @@
-    <!-- header section strats -->
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+
+<!-- header section strats -->
     <header class="header_section">
         <div class="header_top">
           <div class="container-fluid">
@@ -87,15 +90,29 @@
 
 
                   <li class="nav-item">
-                    <a class="nav-link" href="product.html">Products</a>
+                    <a class="nav-link" href="{% url 'store:products' %}">Products</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">Why Us</a>
+                    <a class="nav-link" href="#why-us">Why Us</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="testimonial.html">Testimonial</a>
+                    <a class="nav-link" href="#testimonial">Testimonial</a>
                   </li>
-                
+
+                  <li class="nav-item">
+                    <form action="{% url 'set_language' %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                      <select name="language" onchange="this.form.submit()" class="form-control">
+                        
+                        <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                        <option value="ar" {% if LANGUAGE_CODE == 'ar' %}selected{% endif %}>العربية</option>
+                        
+                      </select>
+                    </form>
+                  </li>
+                  
+                  
                 </ul>
               </div>
             </nav>

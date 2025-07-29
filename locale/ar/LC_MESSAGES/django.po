@@ -1,0 +1,143 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-07-23 19:05+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
+"&& n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;\n"
+
+#: .\project\settings.py:215
+msgid "English"
+msgstr ""
+
+#: .\project\settings.py:216
+msgid "Arabic"
+msgstr ""
+
+#: .\store\views.py:21
+msgid "This is a translatable string"
+msgstr ""
+
+#: .\templates\store\home.html:36 .\templates\store\home.html:62
+#: .\templates\store\home.html:86
+msgid "Welcome to our shop"
+msgstr "مرحبًا بكم في موقعنا"
+
+#: .\templates\store\products.html:51
+msgid "Our Products"
+msgstr "منتجاتنا"
+
+#~ msgid "next"
+#~ msgstr "التالى"
+
+#~ msgid "Add to Cart"
+#~ msgstr "أضف إلى السلة"
+
+#~ msgid "Buy Now"
+#~ msgstr "اشترِ الآن"
+
+#~ msgid "Out of Stock"
+#~ msgstr "غير متوفر"
+
+#~ msgid "In Stock"
+#~ msgstr "متوفر"
+
+#~ msgid "View Details"
+#~ msgstr "عرض التفاصيل"
+
+#~ msgid "Description"
+#~ msgstr "الوصف"
+
+#~ msgid "Price"
+#~ msgstr "السعر"
+
+#~ msgid "Search"
+#~ msgstr "بحث"
+
+#~ msgid "Login"
+#~ msgstr "تسجيل الدخول"
+
+#~ msgid "Logout"
+#~ msgstr "تسجيل الخروج"
+
+#~ msgid "Register"
+#~ msgstr "إنشاء حساب"
+
+#~ msgid "Email"
+#~ msgstr "البريد الإلكتروني"
+
+#~ msgid "Password"
+#~ msgstr "كلمة المرور"
+
+#~ msgid "Confirm Password"
+#~ msgstr "تأكيد كلمة المرور"
+
+#~ msgid "Name"
+#~ msgstr "الاسم"
+
+#~ msgid "Address"
+#~ msgstr "العنوان"
+
+#~ msgid "Phone Number"
+#~ msgstr "رقم الهاتف"
+
+#~ msgid "Subtotal"
+#~ msgstr "الإجمالي الفرعي"
+
+#~ msgid "Total"
+#~ msgstr "الإجمالي"
+
+#~ msgid "Checkout"
+#~ msgstr "الدفع"
+
+#~ msgid "Continue Shopping"
+#~ msgstr "مواصلة التسوق"
+
+#~ msgid "Thank you for your order!"
+#~ msgstr "شكرًا لطلبك!"
+
+#~ msgid "Order Summary"
+#~ msgstr "ملخص الطلب"
+
+#~ msgid "Payment Method"
+#~ msgstr "طريقة الدفع"
+
+#~ msgid "Shipping Information"
+#~ msgstr "معلومات الشحن"
+
+#~ msgid "Cart is empty"
+#~ msgstr "سلة التسوق فارغة"
+
+#~ msgid "Quantity"
+#~ msgstr "الكمية"
+
+#~ msgid "Remove"
+#~ msgstr "إزالة"
+
+#~ msgid "Update"
+#~ msgstr "تحديث"
+
+#~ msgid "Home"
+#~ msgstr "الرئيسية"
+
+#~ msgid "Categories"
+#~ msgstr "الفئات"
+
+#~ msgid "Contact Us"
+#~ msgstr "اتصل بنا"
+
+#~ msgid "About Us"
+#~ msgstr "معلومات عنا"

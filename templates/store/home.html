@@ -1,5 +1,7 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% load i18n %}
 {% load static %}
+
 
 
 
@@ -31,7 +33,10 @@
                 <div class="col-md-6">
                   <div class="detail-box">
                     <h1>
-                      Welcome to our shop
+                      
+                      {% blocktrans %}Welcome to our shop{% endblocktrans %}
+
+                      
                     </h1>
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
@@ -55,7 +60,7 @@
                 <div class="col-md-6">
                   <div class="detail-box">
                     <h1>
-                      Welcome to our shop
+                      {% blocktrans %}Welcome to our shop{% endblocktrans %}
                     </h1>
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
@@ -79,7 +84,7 @@
                 <div class="col-md-6">
                   <div class="detail-box">
                     <h1>
-                      Welcome to our shop
+                      {% blocktrans %}Welcome to our shop{% endblocktrans %}
                     </h1>
                     <p>
                       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Iste quam velit saepe dolorem deserunt quo quidem ad optio.
@@ -121,7 +126,7 @@
     <div class="container">
       <div class="heading_container heading_center">
         <h2>
-          Our Products
+          {% blocktrans %}Our Products{% endblocktrans %}
         </h2>
       </div>
       <div class="row">
@@ -171,7 +176,7 @@
 
       </div>
       <div class="btn_box">
-        <a href="" class="view_more-link">
+        <a href="{% url 'store:products' %}" class="view_more-link">
           View More
         </a>
       </div>
@@ -183,6 +188,7 @@
              <h1>This category '{{category.name}}' had not any available products</h1>
         </div>
     {% endif %}
+
 
   </section>
 
@@ -224,7 +230,7 @@
 
         <!-- why us section -->
 
-        <section class="why_us_section layout_padding">
+        <section class="why_us_section layout_padding" id="why-us">
             <div class="container">
             <div class="heading_container heading_center">
                 <h2>
@@ -286,7 +292,7 @@
 
           <!-- client section -->
 
-        <section class="client_section layout_padding-bottom">
+        <section class="client_section layout_padding-bottom" id="testimonial">
             <div class="container">
             <div class="heading_container heading_center">
                 <h2>
