@@ -164,12 +164,37 @@ def products(request, category_slug=None):
 def product_detail(request, slug):
     cache_key = f"product_{slug}"
     product = cache.get(cache_key)
+
+
+    if 'last_viewed_products' in request.session:
+        if slug in request.session['last_viewed_products']:
+            request.session['last_viewed_products'].remove(slug)
+
+
+        products = Product.objects.filter(slug__in=request.session['last_viewed_products'])
+
+        recently_viewed_products = sorted(products,
+        key=lambda x: request.session['last_viewed_products'].index(x.slug))
+
+    
+        request.session['last_viewed_products'].insert(0, slug)
+
+        if len(request.session['last_viewed_products']) > 5:
+            request.session['last_viewed_products'].pop()
+    else:
+        request.session['last_viewed_products'] = [slug]
+
     if product is None:
         product = get_object_or_404(Product, slug=slug, status=store_models.Status.AVAILABLE)  #type: ignore
         cache.set(cache_key, product, timeout = 60 * 30)
     
     serializer = serializers.ProductSerializer(product, many=False)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+
+    json = {
+        'product_details': serializer.data,
+        'recently_viewed_products': recently_viewed_products
+    }
+    return Response(json, status=status.HTTP_200_OK)
 
 
 

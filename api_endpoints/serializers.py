@@ -6,6 +6,8 @@ from accounts.models import Account
 from coupons.models import Coupon
 from orders.models import Order, OrderItem, OrderPay
 from store.models import Category, Product
+from django.utils import timezone
+
 
 # User = settings.AUTH_USER_MODEL
 
@@ -158,30 +160,15 @@ class OrderPaySerializer(serializers.ModelSerializer):
 PRODUCT_QUANTITY_CHOICES = [(i, str(i)) for i in range(1, 51)]
 
 class CartAddProductSerializer(serializers.Serializer):
-    quantity = serializers.TypedChoiceField(choices = PRODUCT_QUANTITY_CHOICES, coerce=int)
+    quantity = serializers.ChoiceField(choices=PRODUCT_QUANTITY_CHOICES)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def to_internal_value(self, data):
+        internal_data = super().to_internal_value(data)
+        internal_data['quantity'] = int(internal_data['quantity'])  # Ensure int
+        return internal_data
 
 
 # 5- serilaizers related to coupon
-
-from rest_framework import serializers
-from django.utils import timezone
-from .models import Coupon
-
 class ApplyCouponSerializer(serializers.Serializer):
     code = serializers.CharField()
 

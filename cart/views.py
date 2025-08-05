@@ -161,7 +161,10 @@ def get_final_cart_cost(request):
 
 
 def round_decimal(value):
+    if not isinstance(value, Decimal):
+        value = Decimal(str(value))  # convert int/float to Decimal safely
     return value.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP)
+
 
 def view_cart(request):
     cart = request.session.get('cart', {})

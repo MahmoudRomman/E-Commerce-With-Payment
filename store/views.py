@@ -94,6 +94,29 @@ def products(request, category_slug=None):
 def product_detail(request, slug):
     cache_key = f"product_{slug}"
     product = cache.get(cache_key)
+    recently_viewed_products = None
+
+    if 'last_viewed_products' in request.session:
+        if slug in request.session['last_viewed_products']:
+            request.session['last_viewed_products'].remove(slug)
+
+
+        products = models.Product.objects.filter(slug__in=request.session['last_viewed_products'])
+
+        recently_viewed_products = sorted(products,
+        key=lambda x: request.session['last_viewed_products'].index(x.slug))
+
+    
+        request.session['last_viewed_products'].insert(0, slug)
+
+        if len(request.session['last_viewed_products']) > 5:
+            request.session['last_viewed_products'].pop()
+    else:
+        request.session['last_viewed_products'] = [slug]
+
+    request.session.modified = True
+
+
     if product is None:
         try:
             product = models.Product.objects.get(slug=slug, status=models.Status.AVAILABLE)  #type: ignore
@@ -103,9 +126,13 @@ def product_detail(request, slug):
             return redirect('store:products')  # redirect to the url page that you want
     
     form = cart_forms.CartAddProductForm()
+
+    print("*" * 100)
+    print(recently_viewed_products)
     context = {
         'product' : product,
         'form' : form,
+        'recently_viewed_products' : recently_viewed_products,
     }
     return render(request, 'store/product_detail.html', context)
 
